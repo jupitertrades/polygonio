@@ -18,7 +18,7 @@ test_that("unidentified tickers or nonequity strings return empty tibble", {
 
 test_that("9 columns", {
   r1 <- get_polygon_daily_prices('AAPL',to = Sys.Date() - 2)
-  expect_equal(ncol(r1), 9)
+  expect_equal(ncol(r1), 8)
 })
 
 test_that("ticker col", {
