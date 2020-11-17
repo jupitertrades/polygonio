@@ -16,14 +16,3 @@ get_polygon_tickers <- function() {
   full_polygon_ticker <- purrr::map_dfr(1:3000,purrr::possibly(get_ticker_loop,otherwise =tibble::tibble()))
   return(full_polygon_ticker)
 }
-
-###########
-pset <- get_polygon_tickers()
-pset_fx <- pset %>% filter(market == 'FX')
-pset_crypto_usd <- pset %>% filter(market == 'CRYPTO' & currency == 'USD')
-pset_stocks <- pset %>% filter(market == 'STOCKS')
-all_ids_raw <- bind_rows(pset_stocks,pset_fx,pset_crypto_usd) %>%
-  mutate(user_ticker = str_remove(ticker,"C:|X:"),
-         user_ticker = ifelse(market == 'CRYPTO',str_remove(user_ticker,'USD'),user_ticker))
-all_ids_slim <- all_ids_raw %>% select(ticker,user_ticker,name_full,market)
-
