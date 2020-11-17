@@ -9,11 +9,11 @@ get_polygon_tickers <- function() {
     locale <- polygon_list %>% map2('locale',purrr::pluck) %>% modify_if(is.null,~as.character(NA)) %>% flatten_chr()
     type <- polygon_list %>% map2('type',purrr::pluck) %>% modify_if(is.null,~as.character(NA)) %>% flatten_chr()
     currency <- polygon_list %>% map2('currency',purrr::pluck) %>% modify_if(is.null,~as.character(NA)) %>% flatten_chr()
-    poly_ref_tibble <- tibble(ticker = tickers, name_full = name_full, market = market, locale = locale,
+    poly_ref_tibble <- tibble::tibble(ticker = tickers, name_full = name_full, market = market, locale = locale,
                               type = type, currency = currency)
   return(poly_ref_tibble)
   }
-  full_polygon_ticker <- purrr::map_dfr(1:3000,purrr::possibly(get_ticker_loop,otherwise = tibble()))
+  full_polygon_ticker <- purrr::map_dfr(1:3000,purrr::possibly(get_ticker_loop,otherwise =tibble::tibble()))
   return(full_polygon_ticker)
 }
 
