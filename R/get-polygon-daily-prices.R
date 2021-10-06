@@ -5,7 +5,7 @@ get_polygon_daily_prices <- function(ticker,from = Sys.Date()-135, to = Sys.Date
     if(class(polygon_list) != 'list' | polygon_list$resultsCount == 0) {
       return(tibble::tibble())
     }
-  if(is.null(polygon$results)) {
+  if(is.null(polygon_list$results)) {
     return(tibble::tibble())
   }
   polygon_df <- polygon_list %>% purrr::pluck('results') %>% dplyr::bind_rows() %>%
