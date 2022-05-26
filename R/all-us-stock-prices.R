@@ -16,13 +16,12 @@ all_us_stock_prices <- function() {
   snapshot <- glue::glue("https://api.polygon.io/v2/snapshot/locale/us/markets/stocks/tickers?apiKey={Sys.getenv('polygon')}") %>% 
     httr::GET() %>% httr::content() %>% purrr::pluck('tickers')
   ticker_list <- purrr::map_chr(snapshot,'ticker')
-  last_price <- purrr::map(snapshot,'min') %>% purrr::map_dbl('c') 
+  today_ohlc <- purrr::map_dfr(snapshot,'day') %>% select(-vw)
+  names(today_ohlc) <- c('close','high','low','open','volume')
   pct_change <- purrr::map_dbl(snapshot,'todaysChangePerc')
-  todays_volume <- purrr::map(snapshot,'day') %>% purrr::map_dbl('v') 
-  current_snapshot <- tibble::tibble(ticker = ticker_list, 
-                                     daily_percent_change = pct_change,
-                                     last_price = last_price,
-                                     todays_volume = todays_volume)
+  current_snapshot <- today_ohlc %>% 
+    mutate(ticker = ticker_list, daily_percent_change = pct_change) %>% 
+    select(c(ticker,everything()))
   return(current_snapshot)
 }
   
